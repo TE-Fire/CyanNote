@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SessionCallback;
@@ -401,7 +400,7 @@ public class UserServiceImpl implements UserService {
                             .build())
                     .collect(Collectors.toList());
 
-            // TODO: 异步线程将用户信息同步到 Redis 中
+            // 异步线程将用户信息同步到 Redis 中
             List<FindUserByIdRspDTO> finalFindUserByIdRspDTOS = findUserByIdRspDTOS2;
             threadPoolTaskExecutor.submit(() -> {
                 // DTO 转 Map
