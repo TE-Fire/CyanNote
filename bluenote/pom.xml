@@ -28,6 +28,7 @@
         <module>bluenote-note</module>
         <module>bluenote-user-relation</module>
         <module>bluenote-count</module>
+        <module>bluenote-data-align</module>
     </modules>
 
     <properties>
