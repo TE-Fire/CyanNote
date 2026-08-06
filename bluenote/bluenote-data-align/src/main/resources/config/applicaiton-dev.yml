@@ -61,6 +61,12 @@ xxl:
     logPath: /data/applogs/xxl-job/jobhandler # 执行器日志存放路径
     logRetentionDays: 30 # 日志保留时间（单位：天）
 
+rocketmq:
+  name-server: 127.0.0.1:9876 # name server 地址
+  consumer:
+    group: bluenote_group
+    pull-batch-size: 5 # 每次拉取的最大消息数
+
 logging:
   level:
     com.tefire.data.align.domain.mapper: debug
