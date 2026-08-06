@@ -3,6 +3,7 @@ package com.tefire.data.align.job;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.tefire.data.align.constants.TableConstants;
@@ -15,6 +16,12 @@ import jakarta.annotation.Resource;
 @Component
 public class CreateTableXxlJob {
     
+    /**
+     * 表总分片数
+     */
+    @Value("${table.shards}")
+    private int tableShards;
+    
     @Resource
     private CreateTableMapper createTableMapper;
 
@@ -26,13 +33,15 @@ public class CreateTableXxlJob {
 
         XxlJobHelper.log("## 开始初始化明日增量数据表...");
 
-        // 分片序号
-        int hashKey = 0;
+        if (tableShards > 0) {
+            for (int hashKey = 0; hashKey < tableShards; hashKey++) {
+                // 表名后缀
+                String tableNameSuffix = TableConstants.buildTableNameSuffix(date, hashKey);
 
-        // 表名后缀
-        String tableNameSuffix = TableConstants.buildTableNameSuffix(date, hashKey);
-
-        createTableMapper.createDataAlignFollowingCountTempTable(tableNameSuffix);
+                // 创建表
+                createTableMapper.createDataAlignFollowingCountTempTable(tableNameSuffix);
+            }
+        }
 
         XxlJobHelper.log("## 结束创建日增量数据表，日期: {}...", date);
     }

@@ -64,3 +64,6 @@ xxl:
 logging:
   level:
     com.tefire.data.align.domain.mapper: debug
+
+table:
+  shards: 3 # 日增量表分片数
