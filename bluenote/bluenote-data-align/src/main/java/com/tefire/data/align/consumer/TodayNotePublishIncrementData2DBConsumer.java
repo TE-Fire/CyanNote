@@ -18,7 +18,7 @@ import org.springframework.core.io.ClassPathResource;
 import com.tefire.data.align.constants.MQConstants;
 import com.tefire.data.align.constants.RedisKeyConstants;
 import com.tefire.data.align.constants.TableConstants;
-import com.tefire.data.align.domain.mapper.InsertRecordMapper;
+import com.tefire.data.align.domain.mapper.InsertMapper;
 import com.tefire.data.align.model.dto.NoteOperateMqDTO;
 import com.tefire.framework.common.util.JsonUtils;
 
@@ -41,7 +41,7 @@ public class TodayNotePublishIncrementData2DBConsumer implements RocketMQListene
     private RedisTemplate<String, Object> redisTemplate;
 
     @Resource
-    private InsertRecordMapper insertRecordMapper;
+    private InsertMapper insertMapper;
     
      /**
      * 表总分片数
@@ -85,7 +85,7 @@ public class TodayNotePublishIncrementData2DBConsumer implements RocketMQListene
 
             // 将日增量变更数据，写入日增量表中
             // - t_data_align_note_publish_count_temp_日期_分片序号
-            insertRecordMapper.insert2DataAlignUserNotePublishCountTempTable(TableConstants.buildTableNameSuffix(date, userIdHashKey), noteCreatorId);
+            insertMapper.insert2DataAlignUserNotePublishCountTempTable(TableConstants.buildTableNameSuffix(date, userIdHashKey), noteCreatorId);
 
             // 3. 数据库写入成功后，再添加布隆过滤器中
             RedisScript<Long> bloomAddScript = RedisScript.of("return redis.call('BF.ADD', KEYS[1], ARGV[1])", Long.class);

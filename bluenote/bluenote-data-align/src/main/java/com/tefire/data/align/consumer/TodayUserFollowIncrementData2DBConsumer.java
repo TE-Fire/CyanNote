@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.tefire.data.align.constants.RedisKeyConstants;
 import com.tefire.data.align.constants.TableConstants;
-import com.tefire.data.align.domain.mapper.InsertRecordMapper;
+import com.tefire.data.align.domain.mapper.InsertMapper;
 import com.tefire.data.align.model.dto.FollowUnfollowMqDTO;
 import com.tefire.framework.common.util.JsonUtils;
 import com.tefire.data.align.constants.MQConstants;
@@ -40,7 +40,7 @@ public class TodayUserFollowIncrementData2DBConsumer implements RocketMQListener
     private RedisTemplate<String, Object> redisTemplate;
 
     @Resource
-    private InsertRecordMapper insertRecordMapper;
+    private InsertMapper insertMapper;
 
      /**
      * 表总分片数
@@ -92,7 +92,7 @@ public class TodayUserFollowIncrementData2DBConsumer implements RocketMQListener
 
             try {
                 // 将日增量变更数据，写入表 t_data_align_following_count_temp_日期_分片序号
-                insertRecordMapper.insert2DataAlignUserFollowingCountTempTable(
+                insertMapper.insert2DataAlignUserFollowingCountTempTable(
                         TableConstants.buildTableNameSuffix(date, userIdHashKey), userId);
             } catch (Exception e) {
                 log.error("", e);
@@ -116,7 +116,7 @@ public class TodayUserFollowIncrementData2DBConsumer implements RocketMQListener
 
             try {
                 // 将日增量变更数据，写入表 t_data_align_fans_count_temp_日期_分片序号
-                insertRecordMapper.insert2DataAlignUserFansCountTempTable(
+                insertMapper.insert2DataAlignUserFansCountTempTable(
                         TableConstants.buildTableNameSuffix(date, targetUserIdHashKey), targetUserId);
             } catch (Exception e) {
                 log.error("", e);
