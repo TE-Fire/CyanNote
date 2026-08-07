@@ -2,7 +2,7 @@ package com.tefire.data.align.domain.mapper;
 
 import org.apache.ibatis.annotations.Param;
 
-public interface InsertRecordMapper {
+public interface InsertMapper {
     /**
      * 笔记点赞数：计数变更
      */

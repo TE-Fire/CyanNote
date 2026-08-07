@@ -19,7 +19,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.tefire.data.align.constants.MQConstants;
 import com.tefire.data.align.constants.RedisKeyConstants;
 import com.tefire.data.align.constants.TableConstants;
-import com.tefire.data.align.domain.mapper.InsertRecordMapper;
+import com.tefire.data.align.domain.mapper.InsertMapper;
 import com.tefire.data.align.model.dto.LikeUnlikeNoteMqDTO;
 import com.tefire.framework.common.util.JsonUtils;
 
@@ -46,7 +46,7 @@ public class TodayNoteLikeIncrementData2DBConsumer implements RocketMQListener<S
     private TransactionTemplate transactionTemplate;
 
     @Resource
-    private InsertRecordMapper insertRecordMapper;
+    private InsertMapper insertMapper;
 
      /**
      * 表总分片数
@@ -87,8 +87,8 @@ public class TodayNoteLikeIncrementData2DBConsumer implements RocketMQListener<S
                     // 将日增量变更数据，分别写入两张表
                     // - t_data_align_note_like_count_temp_日期_分片序号
                     // - t_data_align_user_like_count_temp_日期_分片序号
-                    insertRecordMapper.insert2DataAlignNoteLikeCountTempTable(TableConstants.buildTableNameSuffix(date, noteIdHashKey), noteId);
-                    insertRecordMapper.insert2DataAlignUserLikeCountTempTable(TableConstants.buildTableNameSuffix(date, userIdHashKey), noteCreatorId);
+                    insertMapper.insert2DataAlignNoteLikeCountTempTable(TableConstants.buildTableNameSuffix(date, noteIdHashKey), noteId);
+                    insertMapper.insert2DataAlignUserLikeCountTempTable(TableConstants.buildTableNameSuffix(date, userIdHashKey), noteCreatorId);
 
                     return true;
                 } catch (Exception e) {

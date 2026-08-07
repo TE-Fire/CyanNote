@@ -3,7 +3,7 @@ package com.tefire.data.align.consumer;
 import com.tefire.data.align.constants.MQConstants;
 import com.tefire.data.align.constants.RedisKeyConstants;
 import com.tefire.data.align.constants.TableConstants;
-import com.tefire.data.align.domain.mapper.InsertRecordMapper;
+import com.tefire.data.align.domain.mapper.InsertMapper;
 import com.tefire.data.align.model.dto.CollectUnCollectNoteMqDTO;
 import com.tefire.framework.common.util.JsonUtils;
 
@@ -38,7 +38,7 @@ public class TodayNoteCollectIncrementData2DBConsumer implements RocketMQListene
     private RedisTemplate<String, Object> redisTemplate;
 
     @Resource
-    private InsertRecordMapper insertRecordMapper;
+    private InsertMapper insertMapper;
 
     @Resource
     private TransactionTemplate transactionTemplate;
@@ -90,8 +90,8 @@ public class TodayNoteCollectIncrementData2DBConsumer implements RocketMQListene
                     // 将日增量变更数据，分别写入两张表
                     // - t_data_align_note_collect_count_temp_日期_分片序号
                     // - t_data_align_user_collect_count_temp_日期_分片序号
-                    insertRecordMapper.insert2DataAlignNoteCollectCountTempTable(TableConstants.buildTableNameSuffix(date, noteIdHashKey), noteId);
-                    insertRecordMapper.insert2DataAlignUserCollectCountTempTable(TableConstants.buildTableNameSuffix(date, userIdHashKey), noteCreatorId);
+                    insertMapper.insert2DataAlignNoteCollectCountTempTable(TableConstants.buildTableNameSuffix(date, noteIdHashKey), noteId);
+                    insertMapper.insert2DataAlignUserCollectCountTempTable(TableConstants.buildTableNameSuffix(date, userIdHashKey), noteCreatorId);
 
                     return true;
                 } catch (Exception ex) {
