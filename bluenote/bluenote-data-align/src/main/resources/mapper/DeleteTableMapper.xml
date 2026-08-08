@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.quanxiaoha.xiaohashu.data.align.domain.mapper.DeleteTableMapper">
+<mapper namespace="com.tefire.data.align.domain.mapper.SelectMapper">
 
   <delete id="deleteDataAlignFollowingCountTempTable" parameterType="map">
       DROP TABLE IF EXISTS `t_data_align_following_count_temp_${tableNameSuffix}`;
