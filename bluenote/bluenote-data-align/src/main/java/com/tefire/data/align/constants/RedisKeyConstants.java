@@ -57,6 +57,31 @@ public class RedisKeyConstants {
      */
     public static final String FIELD_LIKE_TOTAL = "likeTotal";
 
+     /**
+     * Hash Field: 笔记收藏总数
+     */
+    public static final String FIELD_COLLECT_TOTAL = "collectTotal";
+
+    /**
+     * Hash Field: 粉丝总数
+     */
+    public static final String FIELD_FANS_TOTAL = "fansTotal";
+
+    /**
+     * Hash Field: 笔记发布总数
+     */
+    public static final String FIELD_NOTE_TOTAL = "noteTotal";
+
+    /**
+     * Hash Field: 用户获得的点赞总数
+     */
+    public static final String FIELD_USER_LIKE_TOTAL = "likeTotal";
+
+    /**
+     * Hash Field: 用户获得的收藏总数
+     */
+    public static final String FIELD_USER_COLLECT_TOTAL = "collectTotal";
+    
       /**
      * 构建完整的布隆过滤器：日增量变更数据，用户笔记点赞，取消点赞(笔记ID) KEY
      * @param date
