@@ -47,6 +47,16 @@ public class RedisKeyConstants {
      */
     public static final String FIELD_FOLLOWING_TOTAL = "followingTotal";
 
+     /**
+     * 笔记维度计数 Key 前缀
+     */
+    private static final String COUNT_NOTE_KEY_PREFIX = "count:note:";
+
+    /**
+     * Hash Field: 笔记点赞总数
+     */
+    public static final String FIELD_LIKE_TOTAL = "likeTotal";
+
       /**
      * 构建完整的布隆过滤器：日增量变更数据，用户笔记点赞，取消点赞(笔记ID) KEY
      * @param date
@@ -117,6 +127,15 @@ public class RedisKeyConstants {
      */
     public static String buildCountUserKey(Long userId) {
         return COUNT_USER_KEY_PREFIX + userId;
+    }
+
+     /**
+     * 构建笔记维度计数 Key
+     * @param noteId
+     * @return
+     */
+    public static String buildCountNoteKey(Long noteId) {
+        return COUNT_NOTE_KEY_PREFIX + noteId;
     }
 
 }
