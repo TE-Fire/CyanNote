@@ -10,7 +10,7 @@
 
 **代码目录与包名仍沿用 `bluenote` / `com.tefire`**：更名只作用于项目展示名称，未做仓库级重命名，避免打断既有提交历史与本地环境。
 
-**当前状态**：微服务后端为学习型实现，功能覆盖主干链路（登录、笔记发布、点赞收藏、关注、计数），但接口未做全量实现；仓库内没有建表 SQL、Nacos 配置导出与容器编排，全量启动依赖 8 类中间件，本地资源难以承受。因此另有第七章的单体联调版规划。
+**当前状态**：微服务后端为学习型实现，功能覆盖主干链路（登录、笔记发布、点赞收藏、关注、计数），但接口未做全量实现；仓库内没有建表 SQL、Nacos 配置导出与容器编排，全量启动依赖 8 类中间件，本地资源难以承受。为此提供第七章的单体联调版：单 jar、零中间件，专门跑前端演示。
 
 ---
 
@@ -104,7 +104,7 @@
 | `bluenote-data-align` | 日增量对齐与布隆校验（XXL-JOB） | 8091 |
 | `bluenote-framework` | 通用组件与自定义 Starter | - |
 | `xiaohashu-vue3` | Vue3 + Vite 前端工程 | 5173（dev） |
-| `bluenote-mono`（规划中） | 单体联调版，用于前端演示 | 8000 |
+| `bluenote-mono` | 单体联调版，用于前端演示（零外部中间件） | 8000 |
 
 ### 3.3 框架层组件
 
@@ -260,7 +260,7 @@ npm run dev     # 5173，/api 代理到 127.0.0.1:8000
 
 ---
 
-## 七、前端联调单体版（规划中，尚未创建）
+## 七、前端联调单体版（bluenote-mono）
 
 ### 7.1 目的与定位
 
@@ -274,7 +274,7 @@ npm run dev     # 5173，/api 代理到 127.0.0.1:8000
 |------|------|
 | 启动快 | 单个 Spring Boot 应用，`spring-boot:run` 冷启动目标 < 5s |
 | 占资源少 | 堆内存 `-Xmx256m`；无 Nacos / Redis / RocketMQ / Cassandra / ZooKeeper |
-| 存储 | H2 内存库 + `schema.sql` / `data.sql` 启动灌数据，重启即重置 |
+| 存储 | 纯内存（ConcurrentHashMap）+ 启动灌种子数据，重启即重置；不引数据库，省掉建表与连接池 |
 | 鉴权 | 内存 Token 表 + 拦截器，非法或过期返回 HTTP 401（对齐前端拦截器判断） |
 | 端口 | 8000，与网关一致，前端 `vite.config.js` 代理不用改 |
 | 文件上传 | 落本地目录并通过静态资源映射访问，不依赖 MinIO |
@@ -324,9 +324,22 @@ npm run dev     # 5173，/api 代理到 127.0.0.1:8000
 - 单体版的接口路径刻意保留前端的多层前缀（如 `/note/note/publish`），是为了不改前端代码；微服务侧若要对齐，需要调整网关路由或控制器映射，属于另一项独立工作，本次不做。
 - 数据仅存内存，刷新后重置，不提供持久化与并发一致性保证。
 
-### 7.5 状态
+### 7.5 启动与能力边界
 
-**规划中，尚未创建**。待确认命名、端口占用与演示数据范围后再落地。
+```bash
+cd bluenote-mono
+mvn -DskipTests package
+java -Xmx256m -jar target/bluenote-mono.jar     # 约 2 秒启动，200 MB 上下
+bash smoke.sh                                    # 27 个接口逐条自检
+```
+
+前端照旧 `npm run dev`，`/api` 代理指向 8000，不需要改配置。种子数据为 6 个用户、24 篇笔记、10 个频道、8 个话题、7 条评论（含 1 条二级评论），图片由 `/img/**` 现场生成 SVG，不依赖外网图床。
+
+**已跑通的演示路径**：发现页与频道筛选、笔记详情与轮播、点赞收藏、搜索笔记与用户、关注与粉丝列表、个人主页三个 tab、评论与回复、验证码登录（任意非空验证码）、发布图文笔记、上传头像与图片。
+
+**刻意不做的**：视频笔记（无视频素材，全部图文）、密码登录（前端只提供验证码入口）、真实短信、计数最终一致与日终对账、并发控制。数据全在内存，重启即恢复种子状态。
+
+**一个环境坑**：部分 IDE / Agent 进程会注入 `SERVER__PORT`，Spring 的宽松绑定会把它当成 `server.port` 并覆盖 `application.yml`。启动类已在 `main` 中兜底钉住 8000，`-Dserver.port` 与 `--server.port` 仍可覆盖。
 
 ---
 
@@ -348,7 +361,9 @@ BlueNoteBook/
 │   ├── bluenote-framework/              # common + 3 个 starter
 │   └── pom.xml                          # 父 POM
 ├── xiaohashu-vue3/                      # 前端（Vue3 + Vite）
-├── bluenote-mono/                       # 单体联调版（规划中）
+├── bluenote-mono/                       # 单体联调版（单 jar，零中间件）
+│   ├── src/main/java/com/tefire/mono/   # controller / store / common / config
+│   └── smoke.sh                         # 27 个前端接口自检脚本
 ├── 学习总结/                            # 技术笔记
 ├── api-documentation.md / .json         # 接口文档
 └── README.md
@@ -431,7 +446,7 @@ MySQL 与 Cassandra 之间没有本地事务，采用「先写正文、再写元
 | bluenote-framework | 完成 | common + 3 个 starter |
 | 评论 / 搜索模块 | 未开始 | 前端已有页面与 API 封装，后端无对应服务 |
 | xiaohashu-vue3 | 可运行 | 需后端或单体版提供接口 |
-| bluenote-mono | 规划中 | 见第七章 |
+| bluenote-mono | 已实现 | 27 个前端接口全部可用，见第七章 |
 
 **已知缺口**：无建表 SQL、无 Nacos 配置导出、无容器编排；部分配置项仍为明文凭据，上线前需外置。
 
