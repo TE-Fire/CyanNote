@@ -488,7 +488,7 @@ Response<Long> response = userFeignApi.registerUser(dto);
 
 Feign 的动态代理不是一个封闭的系统。每一步都可以被定制：
 
-- **Encder/Decoder 定制**（你的 `FeignFormConfig` 用了这个能力）—— 处理特殊的数据格式
+- **Encoder/Decoder 定制**（你的 `FeignFormConfig` 用了这个能力）—— 处理特殊的数据格式
 - **RequestInterceptor**（你的 `FeignRequestInterceptor` 用了这个能力）—— 在请求发出去前做修饰
 - **Client 替换** —— 换成 OkHttp 或 Apache HttpClient
 - **Contract 替换** —— 用 JAX-RS 注解而不是 Spring MVC 注解

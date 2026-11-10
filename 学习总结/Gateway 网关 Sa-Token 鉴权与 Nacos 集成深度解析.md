@@ -152,7 +152,7 @@ spring:
 
 ### 3.1 SaReactorFilter：网关层的鉴权入口
 
-小蓝书网关中，所有鉴权逻辑都集中在一个 Bean 中：[SaTokenConfigure.java](bluenote/bluenote-gateway/src/main/java/com/tefire/gateway/auth/SaTokenConfigure.java)
+小蓝书网关中，所有鉴权逻辑都集中在一个 Bean 中：[SaTokenConfigure.java](../bluenote/bluenote-gateway/src/main/java/com/tefire/gateway/auth/SaTokenConfigure.java)
 
 ```java
 @Configuration
@@ -233,7 +233,7 @@ SaRouter.match("/**")
    - 会话不存在或已过期 → 抛出 NotLoginException
 ```
 
-关键点：**Sa-Token 不做用户密码校验，它只做 Token 校验。** 用户密码校验是 `UserServiceImpl.loginAndRegister()` 做的事——验证通过后调用 `StpUtil.login(userId)` 把登录态写入 Redis。到了网关层，只认 Token 不认人。
+关键点：**Sa-Token 不做用户密码校验，它只做 Token 校验。** 验证码校验与密码校验是 `AuthServiceImpl.loginAndRegister()` 做的事——验证通过后调用 `StpUtil.login(userId)` 把登录态写入 Redis。到了网关层，只认 Token 不认人。
 
 ### 3.5 `StpUtil.checkPermission()` —— 权限校验
 
@@ -298,7 +298,7 @@ role:permissions:editor          ["app:note:edit", "app:note:publish"]
 
 ### 4.2 权限数据如何进入 Redis？
 
-权限数据的写入由 **`PushRolePermissions2RedisRunner`** 负责。它是一个 `ApplicationRunner`，在 `bluenote-auth` 服务启动时执行：
+权限数据的写入由 **`PushRolePermissions2RedisRunner`** 负责。它是一个 `ApplicationRunner`，在 `bluenote-user` 服务启动时执行：
 
 ```java
 @Component
@@ -334,7 +334,7 @@ public class PushRolePermissions2RedisRunner implements ApplicationRunner {
 
 值得关注的几个设计细节：
 
-**幂等控制（`setIfAbsent`）**：如果 auth 服务重启了，权限数据不会重复写入——24小时内只同步一次。`push.permission.flag` 这个 key 的 TTL 设为 1 天，过期后下次启动会重新同步。
+**幂等控制（`setIfAbsent`）**：如果 user 服务重启了，权限数据不会重复写入——24小时内只同步一次。`push.permission.flag` 这个 key 的 TTL 设为 1 天，过期后下次启动会重新同步。
 
 **只有 `type=3` 的权限被同步**：`PermissionDOMapper.selectAppEnabledList()` 的 SQL 条件是 `type = 3`。这意味着只有 APP 级别的权限（接口访问权限）才进入 Redis。菜单权限（type=1）、按钮权限（type=2）不走网关鉴权，由前端或其他服务自行处理。
 
@@ -342,14 +342,15 @@ public class PushRolePermissions2RedisRunner implements ApplicationRunner {
 
 ### 4.3 用户角色数据如何写入？
 
-角色-权限的映射由启动 Runner 同步，但**用户的角色分配**是在注册/登录时写入的。看 `UserServiceImpl.registerUser()` 的关键代码：
+角色-权限的映射由启动 Runner 同步，但**用户的角色分配**是在注册时写入的。看 `UserServiceImpl.register(RegisterUserReqDTO)` 的关键代码（为便于理解做了简化）：
 
 ```java
-public Long registerUser(String phone) {
+public Response<Long> register(RegisterUserReqDTO reqDTO) {
+    String phone = reqDTO.getPhone();
     return transactionTemplate.execute(status -> {
         try {
-            // 1. 生成用户 ID（Redis 自增）
-            Long userId = redisTemplate.opsForValue().increment("bluenote.id.generator");
+            // 1. RPC 调用分布式 ID 生成服务（Leaf）生成用户 ID
+            Long userId = Long.parseLong(distributedIdGeneratorRpcService.getUserId());
             // 2. 插入用户记录到 t_user
             UserDO userDO = buildUserDO(phone, userId);
             userDOMapper.insert(userDO);
@@ -628,7 +629,7 @@ public static String buildRolePermissionsKey(String roleKey) {
   │                           → 转发                                          │
   │                                           │ ──────────────────────────────→│
   │                                           │                               │
-  │                                           │              ③ UserController.loginAndRegister()
+  │                                           │              ③ AuthController.loginAndRegister()
   │                                           │                 → 验证码校验（查 Redis）
   │                                           │                 → 查用户或注册新用户
   │                                           │                 → 分配默认角色
@@ -735,13 +736,13 @@ public static String buildRolePermissionsKey(String roleKey) {
 │                  bluenote-auth (:8080) × N 实例                           │
 │                                                                          │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
-│  │  启动时: PushRolePermissions2RedisRunner                         │    │
+│  │  权限数据由 user 服务同步: PushRolePermissions2RedisRunner       │    │
 │  │  t_role + t_role_permission_rel + t_permission → Redis           │    │
 │  │  role:permissions:common_user → ["app:note:view", ...]          │    │
 │  └─────────────────────────────────────────────────────────────────┘    │
 │                                                                          │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
-│  │  登录时: UserServiceImpl.loginAndRegister()                      │    │
+│  │  登录时: AuthServiceImpl.loginAndRegister()                      │    │
 │  │  StpUtil.login(userId) → 写登录会话到 Redis                      │    │
 │  │  user:roles:{userId} → ["common_user"]                          │    │
 │  └─────────────────────────────────────────────────────────────────┘    │
@@ -805,10 +806,10 @@ SaRouter.match("/**")            // 默认全部拦截
 
 | 文件 | 模块 | 作用 |
 |------|------|------|
-| [SaTokenConfigure.java](bluenote/bluenote-gateway/src/main/java/com/tefire/gateway/auth/SaTokenConfigure.java) | gateway | SaReactorFilter 配置，定义拦截规则和鉴权逻辑 |
-| [StpInterfaceImpl.java](bluenote/bluenote-gateway/src/main/java/com/tefire/gateway/auth/StpInterfaceImpl.java) | gateway | 自定义权限/角色数据获取，对接 Redis |
-| [RedisKeyConstants.java](bluenote/bluenote-gateway/src/main/java/com/tefire/gateway/constant/RedisKeyConstants.java) | gateway | Redis Key 构建常量 |
-| [bootstrap.yml](bluenote/bluenote-gateway/src/main/resources/bootstrap.yml) | gateway | Nacos 服务发现配置 |
-| [application.yml](bluenote/bluenote-gateway/src/main/resources/application.yml) | gateway | 路由规则、Redis、Sa-Token 配置 |
-| [UserServiceImpl.java](bluenote/bluenote-auth/src/main/java/com/tefire/auth/service/impl/UserServiceImpl.java) | auth | 登录注册、用户角色写入 Redis |
-| [PushRolePermissions2RedisRunner.java](bluenote/bluenote-auth/src/main/java/com/tefire/auth/runner/PushRolePermissions2RedisRunner.java) | auth | 启动时同步角色-权限到 Redis |
+| [SaTokenConfigure.java](../bluenote/bluenote-gateway/src/main/java/com/tefire/gateway/auth/SaTokenConfigure.java) | gateway | SaReactorFilter 配置，定义拦截规则和鉴权逻辑 |
+| [StpInterfaceImpl.java](../bluenote/bluenote-gateway/src/main/java/com/tefire/gateway/auth/StpInterfaceImpl.java) | gateway | 自定义权限/角色数据获取，对接 Redis |
+| [RedisKeyConstants.java](../bluenote/bluenote-gateway/src/main/java/com/tefire/gateway/constant/RedisKeyConstants.java) | gateway | Redis Key 构建常量 |
+| [bootstrap.yml](../bluenote/bluenote-gateway/src/main/resources/bootstrap.yml) | gateway | Nacos 服务发现配置 |
+| [application.yml](../bluenote/bluenote-gateway/src/main/resources/application.yml) | gateway | 路由规则、Redis、Sa-Token 配置 |
+| [UserServiceImpl.java](../bluenote/bluenote-user/bluenote-user-biz/src/main/java/com/tefire/user/biz/service/impl/UserServiceImpl.java) | user | 用户注册、默认角色与角色数据写入 Redis |
+| [PushRolePermissions2RedisRunner.java](../bluenote/bluenote-user/bluenote-user-biz/src/main/java/com/tefire/user/biz/runner/PushRolePermissions2RedisRunner.java) | user | 启动时同步角色-权限到 Redis |

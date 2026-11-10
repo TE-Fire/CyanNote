@@ -78,7 +78,7 @@ static class Entry extends WeakReference<ThreadLocal<?>> {
 
 ### 1.4 小蓝书项目中的实际使用
 
-[LoginUserContextHolder.java](bluenote/bluenote-auth/src/main/java/com/tefire/auth/filter/LoginUserContextHolder.java) 是一个典型的 ThreadLocal 工具类：
+[LoginUserContextHolder.java](../bluenote/bluenote-framework/bluenote-spring-boot-starter-biz-context/src/main/java/com/tefire/framework/biz/context/holder/LoginUserContextHolder.java) 是一个典型的 ThreadLocal 工具类：
 
 ```java
 public class LoginUserContextHolder {
@@ -102,7 +102,7 @@ public class LoginUserContextHolder {
 }
 ```
 
-在 [HeaderUserId2ContextFilter.java](bluenote/bluenote-auth/src/main/java/com/tefire/auth/filter/HeaderUserId2ContextFilter.java) 中被使用：
+在 [HeaderUserId2ContextFilter.java](../bluenote/bluenote-framework/bluenote-spring-boot-starter-biz-context/src/main/java/com/tefire/framework/biz/context/filter/HeaderUserId2ContextFilter.java) 中被使用：
 
 ```java
 @Override
@@ -466,7 +466,7 @@ Agent 会在字节码层面拦截所有线程池的 `execute()` 方法，自动�
 
 ### 4.4 小蓝书项目中的实际使用
 
-回头再看 [LoginUserContextHolder.java](bluenote/bluenote-auth/src/main/java/com/tefire/auth/filter/LoginUserContextHolder.java) 中那一行关键代码：
+回头再看 [LoginUserContextHolder.java](../bluenote/bluenote-framework/bluenote-spring-boot-starter-biz-context/src/main/java/com/tefire/framework/biz/context/holder/LoginUserContextHolder.java) 中那一行关键代码：
 
 ```java
 import com.alibaba.ttl.TransmittableThreadLocal;
@@ -577,7 +577,6 @@ try {
 
 | 文件 | 作用 |
 |------|------|
-| [LoginUserContextHolder.java](bluenote/bluenote-auth/src/main/java/com/tefire/auth/filter/LoginUserContextHolder.java) | TTL 实际使用，`TransmittableThreadLocal.withInitial(HashMap::new)` |
-| [HeaderUserId2ContextFilter.java](bluenote/bluenote-auth/src/main/java/com/tefire/auth/filter/HeaderUserId2ContextFilter.java) | Filter 中设置和 finally 清理 TTL 上下文 |
-| [GlobalConstants.java](bluenote/bluenote-framework/bluenote-common/src/main/java/com/tefire/framework/common/constant/GlobalConstants.java) | 定义了 `USER_ID = "userId"` 常量 |
-| [记忆：ThreadLocal 线程池局限性](threadlocal-threadpool-limitation.md) | 记录了项目中 ThreadLocal 升级为 TTL 的上下文 |
+| [LoginUserContextHolder.java](../bluenote/bluenote-framework/bluenote-spring-boot-starter-biz-context/src/main/java/com/tefire/framework/biz/context/holder/LoginUserContextHolder.java) | TTL 实际使用，`TransmittableThreadLocal.withInitial(HashMap::new)` |
+| [HeaderUserId2ContextFilter.java](../bluenote/bluenote-framework/bluenote-spring-boot-starter-biz-context/src/main/java/com/tefire/framework/biz/context/filter/HeaderUserId2ContextFilter.java) | Filter 中设置和 finally 清理 TTL 上下文 |
+| [GlobalConstants.java](../bluenote/bluenote-framework/bluenote-common/src/main/java/com/tefire/framework/common/constant/GlobalConstants.java) | 定义了 `USER_ID = "userId"` 常量 |

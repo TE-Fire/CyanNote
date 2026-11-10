@@ -418,8 +418,8 @@ Cassandra 原生支持多数据中心复制。你可以把数据同时写到"上
 │   └── [bluenote-kv] → Cassandra: SELECT content FROM note_content WHERE id = uuid-123
 │       ← 返回: {"id": "uuid-123", "content": "今天天气真好..."}  (主键查询，毫秒级)
 │
-├── [bluenote-note] → Feign → [bluenote-comment]
-│   └── [bluenote-comment] → MySQL: 查询评论列表
+├── [bluenote-note] → Feign → [评论服务（规划中，仓库内未实现）]
+│   └── MySQL: 查询评论列表
 │       ← 返回: [...]
 │
 └── 组装完整页面返回给用户

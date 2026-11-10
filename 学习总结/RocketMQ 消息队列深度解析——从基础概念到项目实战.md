@@ -178,7 +178,7 @@ graph TB
 └─────────────────────────────────────────┘
 ```
 
-在 BlueNoteBook 项目中的一条实际消息（来自 [NoteServiceImpl.java](bluenote/bluenote-note/bluenote-note-biz/src/main/java/com/tefire/note/biz/service/impl/NoteServiceImpl.java)）：
+在 BlueNoteBook 项目中的一条实际消息（来自 [NoteServiceImpl.java](../bluenote/bluenote-note/bluenote-note-biz/src/main/java/com/tefire/note/biz/service/impl/NoteServiceImpl.java)）：
 
 ```java
 // 构建消息体
@@ -205,7 +205,7 @@ rocketMQTemplate.asyncSendOrderly(destination, message, hashKey, callback);
 Topic 是**消息的逻辑分类**。你可以把它理解为"消息的文件夹"——每种业务类型的消息发送到各自的 Topic。
 
 ```text
-BlueNoteBook 项目中的 Topic 一览：
+BlueNoteBook 项目中的主要 Topic（笔记撰写时的核心链路；后续 count / data-align 模块另有计数类主题新增，完整清单以各模块 `MQConstants.java` 为准）：
 
 LikeUnlikeTopic         ← 笔记点赞/取消点赞的消息
 FollowUnfollowTopic     ← 关注/取关的消息
