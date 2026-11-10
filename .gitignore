@@ -53,3 +53,8 @@ desktop.ini
 
 # 各类 target 目录（多模块项目）
 **/target/
+
+# 本地文档与会话产物（不进版本库）
+.workbuddy/
+.archify/
+/个人实习简历-王旭.html
