@@ -1,0 +1,22 @@
+server:
+  port: 8000          # 与网关一致，前端 vite 代理不需要改
+
+spring:
+  application:
+    name: bluenote-mono
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 40MB
+  mvc:
+    log-resolved-exception: false
+
+logging:
+  level:
+    root: warn
+    com.tefire.mono: info
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %-5level %logger{0} - %msg%n"
