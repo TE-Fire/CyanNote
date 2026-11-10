@@ -2,7 +2,7 @@
   <div class="relative">
     <!-- 话题输入框 -->
     <div class="flex items-center border-b border-gray-100 py-3">
-      <span class="text-[#ff2442] text-[14px] font-medium mr-2">#</span>
+      <span class="text-[#0E9384] text-[14px] font-medium mr-2">#</span>
       <input
         ref="inputRef"
         v-model="keyword"
@@ -22,7 +22,7 @@
         :key="topic.id"
         class="px-3 py-1.5 bg-gray-50 rounded-full text-[14px] text-gray-800 flex items-center gap-1"
       >
-        <span class="text-[#ff2442]">#</span>
+        <span class="text-[#0E9384]">#</span>
         {{ topic.name }}
         <button 
           class="ml-1 p-0.5 hover:bg-gray-200 rounded-full"
@@ -46,7 +46,7 @@
         class="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center"
         @click="selectTopic(topic)"
       >
-        <span class="text-[#ff2442] mr-1">#</span>
+        <span class="text-[#0E9384] mr-1">#</span>
         <div>
           <div class="text-[14px] text-gray-800">{{ topic.name }}</div>
           <div class="text-[12px] text-gray-400">{{ topic.noteCount }}个笔记</div>

@@ -35,7 +35,7 @@
           <li v-if="!isLoggedIn" class="px-5 space-y-3">
             <button 
               v-if="!isLoggedIn" 
-              class="w-full bg-[#ff2442] text-white font-bold rounded-full py-3 mt-4 cursor-pointer"
+              class="w-full bg-[#0E9384] text-white font-bold rounded-full py-3 mt-4 cursor-pointer"
               @click="handleShowLogin"
             >
               登录

@@ -42,7 +42,7 @@
             <!-- 名字和关注按钮 -->
             <div class="flex items-center justify-between">
               <span class="font-bold text-[16px] text-[#333] truncate">{{ user.name }}</span>
-              <button class="bg-[#ff2442] text-white h-[32px] w-[80px] px-[24px] 
+              <button class="bg-[#0E9384] text-white h-[32px] w-[80px] px-[24px] 
               text-sm rounded-full hover:opacity-90 cursor-pointer">
                 关注
               </button>

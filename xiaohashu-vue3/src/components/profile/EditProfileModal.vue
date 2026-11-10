@@ -46,7 +46,7 @@
             <input
               v-model="form.nickname"
               type="text"
-              class="w-full h-10 px-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#ff2442]"
+              class="w-full h-10 px-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0E9384]"
               placeholder="请输入昵称"
               maxlength="24"
               @input="updateNicknameCount"
@@ -60,15 +60,15 @@
           </p>
         </div>
 
-        <!-- 小哈书号 -->
+        <!-- 青笺号 -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">小哈书号</label>
+          <label class="block text-sm font-medium text-gray-700 mb-2">青笺号</label>
           <div class="relative">
             <input
               v-model="form.xiaohashuId"
               type="text"
-              class="w-full h-10 px-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#ff2442]"
-              placeholder="请输入小哈书号"
+              class="w-full h-10 px-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0E9384]"
+              placeholder="请输入青笺号"
               maxlength="15"
               @input="updateXiaohashuIdCount"
             />
@@ -87,7 +87,7 @@
           <div class="flex gap-3 text-sm">
             <select 
               v-model="form.birthYear"
-              class="h-10 px-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#ff2442] bg-white"
+              class="h-10 px-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0E9384] bg-white"
             >
               <option 
                 v-for="year in birthYears" 
@@ -97,7 +97,7 @@
             </select>
             <select 
               v-model="form.birthMonth"
-              class="h-10 px-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#ff2442] bg-white"
+              class="h-10 px-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0E9384] bg-white"
             >
               <option 
                 v-for="month in months" 
@@ -107,7 +107,7 @@
             </select>
             <select 
               v-model="form.birthDay"
-              class="h-10 px-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#ff2442] bg-white"
+              class="h-10 px-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0E9384] bg-white"
             >
               <option 
                 v-for="day in getDaysInMonth(form.birthYear, form.birthMonth)" 
@@ -125,7 +125,7 @@
             <textarea
               v-model="form.introduction"
               rows="3"
-              class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#ff2442] resize-vertical min-h-[80px] max-h-[200px] pr-16"
+              class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0E9384] resize-vertical min-h-[80px] max-h-[200px] pr-16"
               placeholder="介绍一下自己吧"
               maxlength="100"
               @input="updateIntroductionCount"
@@ -145,7 +145,7 @@
                 v-model="form.sex"
                 type="radio"
                 :value="0"
-                class="w-4 h-4 text-[#ff2442]"
+                class="w-4 h-4 text-[#0E9384]"
               />
               <span class="ml-2">女</span>
             </label>
@@ -154,7 +154,7 @@
                 v-model="form.sex"
                 type="radio"
                 :value="1"
-                class="w-4 h-4 text-[#ff2442]"
+                class="w-4 h-4 text-[#0E9384]"
               />
               <span class="ml-2">男</span>
             </label>
@@ -198,7 +198,7 @@ const form = ref({
 
 // 昵称字数计数
 const nicknameCount = ref(0)
-// 小红书号字数计数
+// 青笺号字数计数
 const xiaohashuIdCount = ref(0)
 // 简介字数计数
 const introductionCount = ref(0)
@@ -208,7 +208,7 @@ const updateNicknameCount = () => {
   nicknameCount.value = form.value.nickname.length
 }
 
-// 更新小红书号字数计数
+// 更新青笺号字数计数
 const updateXiaohashuIdCount = () => {
   xiaohashuIdCount.value = form.value.xiaohashuId.length
 }
@@ -275,7 +275,7 @@ const initFormData = () => {
     
     // 初始化昵称字数计数
     nicknameCount.value = form.value.nickname.length
-    // 初始化小红书号字数计数
+    // 初始化青笺号字数计数
     xiaohashuIdCount.value = form.value.xiaohashuId.length
     // 初始化简介字数计数
     introductionCount.value = form.value.introduction.length
@@ -337,30 +337,30 @@ const handleConfirm = () => {
     return
   }
 
-  // 小红书号验证
+  // 青笺号验证
   if (!form.value.xiaohashuId.trim()) {
-    message.show('请输入小红书号')
+    message.show('请输入青笺号')
     return
   }
   
-  // 小红书号长度验证
+  // 青笺号长度验证
   const xiaohashuId = form.value.xiaohashuId.trim()
   if (xiaohashuId.length < 6 || xiaohashuId.length > 15) {
-    message.show('小红书号长度应为 6-15 个字符')
+    message.show('青笺号长度应为 6-15 个字符')
     return
   }
 
-  // 小红书号格式验证：必须包含英文字母，且只能包含英文、数字和下划线
+  // 青笺号格式验证：必须包含英文字母，且只能包含英文、数字和下划线
   const hasLetter = /[a-zA-Z]/.test(xiaohashuId)
   const validFormat = /^[a-zA-Z0-9_]+$/.test(xiaohashuId)
 
   if (!hasLetter) {
-    message.show('小红书号必须包含英文字母')
+    message.show('青笺号必须包含英文字母')
     return
   }
 
   if (!validFormat) {
-    message.show('小红书号只能包含英文字母、数字和下划线')
+    message.show('青笺号只能包含英文字母、数字和下划线')
     return
   }
 
@@ -456,7 +456,7 @@ select {
 
 select:focus {
   outline: none;
-  border-color: #ff2442;
+  border-color: #0E9384;
 }
 
 /* 禁用状态下的输入框样式 */

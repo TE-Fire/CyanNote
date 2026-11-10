@@ -9,7 +9,7 @@
       <!-- 主要菜单项 -->
       <div class="p-1.5">
         <div class="px-3 py-2 hover:bg-gray-100 text-gray-600 hover:text-gray-800 rounded-lg cursor-not-allowed flex items-center justify-between">
-          <span>关于小红书</span>
+          <span>关于青笺</span>
           <svg class="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M9 5l7 7-7 7" stroke-width="2" stroke-linecap="round"/>
           </svg>
@@ -37,7 +37,7 @@
           键盘快捷键
         </div>
         <div class="px-3 py-2 hover:bg-gray-100 text-gray-600 hover:text-gray-800 rounded-lg cursor-not-allowed">
-          添加小红书到桌面
+          添加青笺到桌面
         </div>
         <div class="px-3 py-2 hover:bg-gray-100 text-gray-600 hover:text-gray-800 rounded-lg cursor-not-allowed">
           打开小窗模式

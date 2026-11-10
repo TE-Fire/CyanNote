@@ -15,7 +15,7 @@
         <div class="user-info">
           <h3 class="nickname">{{ user.nickname }}</h3>
           <div v-if="type === 'user'" class="mt-[6px]">
-            <span>小红书号：{{ user.xiaohashuId }}</span>
+            <span>青笺号：{{ user.xiaohashuId }}</span>
           </div>
           <div v-if="type === 'user' || type === 'fans'" class="mt-[6px] flex items-center">
             <span>粉丝・{{ user.fansTotal || 0 }}
@@ -162,7 +162,7 @@ const handleFollow = () => {
     padding: 0;
     border-radius: 100px;
     font-weight: 500;
-    background-color: #ff2e4d;
+    background-color: #0E9384;
     color: #fff;
     font-size: 16px;
     font-weight: 600;

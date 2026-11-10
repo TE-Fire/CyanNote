@@ -39,7 +39,7 @@
                     v-for="sort in sortOptions" 
                     :key="sort.value"
                     class="px-3 py-2 rounded-full text-sm inline-flex items-center justify-center"
-                    :class="selectedSort === sort.value ? 'border border-[#ff2442] text-[#ff2442] bg-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+                    :class="selectedSort === sort.value ? 'border border-[#0E9384] text-[#0E9384] bg-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
                     @click="selectedSort = sort.value"
                   >
                     <div class="flex items-center justify-center">
@@ -66,7 +66,7 @@
                     v-for="type in noteTypes" 
                     :key="type.value"
                     class="px-3 py-2 rounded-full text-sm inline-flex items-center justify-center"
-                    :class="selectedType === type.value ? 'border border-[#ff2442] text-[#ff2442] bg-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+                    :class="selectedType === type.value ? 'border border-[#0E9384] text-[#0E9384] bg-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
                     @click="selectedType = type.value"
                   >
                     <div class="flex items-center justify-center">
@@ -93,7 +93,7 @@
                     v-for="time in timeFilters" 
                     :key="time.value"
                     class="px-3 py-2 rounded-full text-sm inline-flex items-center justify-center"
-                    :class="selectedTime === time.value ? 'border border-[#ff2442] text-[#ff2442] bg-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+                    :class="selectedTime === time.value ? 'border border-[#0E9384] text-[#0E9384] bg-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
                     @click="selectedTime = time.value"
                   >
                     <div class="flex items-center justify-center">
@@ -121,7 +121,7 @@
                   重置
                 </button>
                 <button 
-                  class="cursor-pointer flex-1 h-10 font-bold rounded-full bg-[#ff2442] text-white hover:opacity-90"
+                  class="cursor-pointer flex-1 h-10 font-bold rounded-full bg-[#0E9384] text-white hover:opacity-90"
                   @click="applyFilters"
                 >
                   确定

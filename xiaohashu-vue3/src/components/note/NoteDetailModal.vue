@@ -52,7 +52,7 @@
               <button 
               v-if="!userStore.token || userStore.profile.userId !== currNote.creatorId"
               @click="handleFollow"
-              class="bg-[#ff2442] text-white px-6 py-2 rounded-full font-bold hover:opacity-90 w-[96px] h-[40px] cursor-pointer">
+              class="bg-[#0E9384] text-white px-6 py-2 rounded-full font-bold hover:opacity-90 w-[96px] h-[40px] cursor-pointer">
                 关注
               </button>
             </div>
@@ -70,7 +70,7 @@
               >
                 <h1 class="title">{{ currNote.title }}</h1>
                 <div class="note-conten whitespace-pre-wrap">{{ currNote.content }}</div>
-                <ul v-if="currNote.topics && currNote.topics.length > 0" class="text-[#13386c] flex flex-wrap gap-2">
+                <ul v-if="currNote.topics && currNote.topics.length > 0" class="text-[#0B7A6E] flex flex-wrap gap-2">
                   <li v-for="(topic, index) in currNote.topics" :key="index" class="cursor-pointer">#{{topic.name}}</li>
                 </ul>
                 <div class="text-gray-500 text-[14px] mt-[12px]">
@@ -186,8 +186,8 @@
                         class="w-[20px] h-[20px] transition-all duration-200"
                         :class="[isNoteLiked ? 'animate-like' : 'animate-unlike']"
                         viewBox="0 0 24 24" 
-                        :fill="isNoteLiked ? '#ff2442' : 'none'" 
-                        :stroke="isNoteLiked ? '#ff2442' : 'currentColor'"
+                        :fill="isNoteLiked ? '#0E9384' : 'none'" 
+                        :stroke="isNoteLiked ? '#0E9384' : 'currentColor'"
                         @click="handleNoteLike"
                       >
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-width="2"/>
@@ -279,7 +279,7 @@
                   <div class="flex items-center gap-2">
                     <!-- 发送按钮 -->
                     <button 
-                      class="w-[64px] h-[40px] text-[16px] text-white bg-[#ff2442] 
+                      class="w-[64px] h-[40px] text-[16px] text-white bg-[#0E9384] 
                       rounded-full font-bold cursor-pointer"
                       :class="{'opacity-50': !commentContent.trim() && !commentImage}"
                       @click="handlePublishComment"
@@ -964,7 +964,7 @@ img {
 }
 
 .content-input {
-  caret-color: #ff2442;
+  caret-color: #0E9384;
   margin: 0px;
   height: 40px;  /* 固定高度 */
   background-color: rgba(0, 0, 0, 0.03);

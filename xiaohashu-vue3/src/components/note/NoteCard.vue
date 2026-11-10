@@ -58,8 +58,8 @@
             :class="{'scale-animation': isLiked}"
             viewBox="0 0 24 24" 
             :style="{
-              fill: isLiked ? '#fe2c55' : 'none',
-              stroke: isLiked ? '#fe2c55' : 'currentColor'
+              fill: isLiked ? '#0E9384' : 'none',
+              stroke: isLiked ? '#0E9384' : 'currentColor'
             }"
             stroke-width="2"
           >

@@ -36,7 +36,7 @@
                 <button 
                   class="px-4 py-2 rounded-full text-sm font-medium transition-colors border"
                   :class="noteType === 'image' 
-                    ? 'border-[#ff2442] text-[#ff2442] bg-[#fff5f7]' 
+                    ? 'border-[#0E9384] text-[#0E9384] bg-[#fff5f7]' 
                     : 'border-gray-200 text-gray-700 hover:border-gray-300 bg-white'"
                   @click="setNoteType('image')"
                 >
@@ -50,7 +50,7 @@
                     <!-- 对号标识 -->
                     <svg 
                       v-if="noteType === 'image'" 
-                      class="w-4 h-4 ml-1.5 text-[#ff2442]" 
+                      class="w-4 h-4 ml-1.5 text-[#0E9384]" 
                       viewBox="0 0 24 24" 
                       fill="none" 
                       stroke="currentColor"
@@ -62,7 +62,7 @@
                 <button 
                   class="px-4 py-2 rounded-full text-sm font-medium transition-colors border"
                   :class="noteType === 'video' 
-                    ? 'border-[#ff2442] text-[#ff2442] bg-[#fff5f7]' 
+                    ? 'border-[#0E9384] text-[#0E9384] bg-[#fff5f7]' 
                     : 'border-gray-200 text-gray-700 hover:border-gray-300 bg-white'"
                   @click="setNoteType('video')"
                 >
@@ -75,7 +75,7 @@
                     <!-- 对号标识 -->
                     <svg 
                       v-if="noteType === 'video'" 
-                      class="w-4 h-4 ml-1.5 text-[#ff2442]" 
+                      class="w-4 h-4 ml-1.5 text-[#0E9384]" 
                       viewBox="0 0 24 24" 
                       fill="none" 
                       stroke="currentColor"
@@ -96,7 +96,7 @@
                 class="relative w-[135px] h-[135px] rounded-xl overflow-hidden bg-gray-100 shrink-0 border border-gray-200"
                 :class="{
                   'opacity-50': draggedItem === index,
-                  'border-[#ff2442] border-2': dragOverIndex === index && draggedItem !== index,
+                  'border-[#0E9384] border-2': dragOverIndex === index && draggedItem !== index,
                   'cursor-grab': !isVideo
                 }"
                 :draggable="!isVideo"
@@ -133,7 +133,7 @@
                   <!-- 播放按钮覆盖层 -->
                   <div class="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors">
                     <div class="w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center">
-                      <svg class="w-5 h-5 text-[#ff2442]" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                      <svg class="w-5 h-5 text-[#0E9384]" viewBox="0 0 24 24" fill="currentColor" stroke="none">
                         <path d="M8 5v14l11-7z"/>
                       </svg>
                     </div>
@@ -179,7 +179,7 @@
               <div 
                 v-if="(noteType === 'image' && files.length < 8) || (noteType === 'video' && files.length === 0)"
                 class="w-[135px] h-[135px] rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center 
-                justify-center cursor-pointer hover:border-[#ff2442] hover:bg-gray-100 transition-colors bg-gray-50/50 shrink-0"
+                justify-center cursor-pointer hover:border-[#0E9384] hover:bg-gray-100 transition-colors bg-gray-50/50 shrink-0"
                 @click="triggerUpload"
                 :class="{'opacity-50 pointer-events-none': isUploading}"
               >
@@ -192,7 +192,7 @@
                   @change="handleFileChange"
                 />
                 <div class="w-10 h-10 rounded-full bg-white mb-2 flex items-center justify-center border border-gray-200">
-                  <svg class="w-5 h-5 text-[#ff2442]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <svg class="w-5 h-5 text-[#0E9384]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path d="M12 5v14M5 12h14" stroke-width="2" stroke-linecap="round"/>
                   </svg>
                 </div>
@@ -216,7 +216,7 @@
             <!-- 图片/视频必填提示 -->
             <div 
               v-if="errors.files" 
-              class="text-[#ff2442] text-[13px] mt-1 flex items-center"
+              class="text-[#0E9384] text-[13px] mt-1 flex items-center"
             >
               <svg class="w-3.5 h-3.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <circle cx="12" cy="12" r="10" stroke-width="2"/>
@@ -233,7 +233,7 @@
                   v-model="title"
                   placeholder="填写标题，可能会帮助更多人看到你的笔记"
                   class="w-full text-[14px] py-4 focus:outline-none border-b border-gray-100 placeholder:text-gray-400 transition-colors pr-20"
-                  :class="{'border-[#ff2442]': errors.title}"
+                  :class="{'border-[#0E9384]': errors.title}"
                 />
                 <!-- 清除按钮和字数统计 -->
                 <div class="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
@@ -253,7 +253,7 @@
               <!-- 标题必填提示 -->
               <div 
                 v-if="errors.title" 
-                class="text-[#ff2442] text-[13px] mt-1 flex items-center"
+                class="text-[#0E9384] text-[13px] mt-1 flex items-center"
               >
                 <svg class="w-3.5 h-3.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <circle cx="12" cy="12" r="10" stroke-width="2"/>
@@ -336,14 +336,14 @@
                         v-for="channel in channelStore.channels"
                         :key="channel.id"
                         class="w-full px-4 py-3 rounded-xl text-left text-[14px] flex items-center justify-between hover:bg-gray-100 transition-colors"
-                        :class="{'text-[#ff2442]': selectedChannel?.id === channel.id}"
+                        :class="{'text-[#0E9384]': selectedChannel?.id === channel.id}"
                         @click="selectChannel(channel)"
                       >
                         <div class="flex items-center text-[#333]">
                           <component :is="channel.icon" class="w-4 h-4 mr-2"/>
                           {{ channel.name }}
                         </div>
-                        <div v-if="selectedChannel?.id === channel.id" class="text-[#ff2442]">
+                        <div v-if="selectedChannel?.id === channel.id" class="text-[#0E9384]">
                           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <path d="M20 6L9 17l-5-5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                           </svg>
@@ -368,7 +368,7 @@
                   
                   <!-- 话题输入和已选话题 -->
                   <div class="relative">
-                    <div class="flex flex-wrap items-center gap-2 min-h-[40px] p-2 border border-gray-200 rounded-lg focus-within:border-[#ff2442]">
+                    <div class="flex flex-wrap items-center gap-2 min-h-[40px] p-2 border border-gray-200 rounded-lg focus-within:border-[#0E9384]">
                       <!-- 已选话题标签 -->
                       <div 
                         v-for="(topic, index) in selectedTopics" 
@@ -443,7 +443,7 @@
                           </svg>
                           <span class="text-[#333]">{{ topicKeyword.trim() }}</span>
                         </div>
-                        <span class="text-[#ff2442] text-xs font-medium">添加新话题</span>
+                        <span class="text-[#0E9384] text-xs font-medium">添加新话题</span>
                       </button>
                     </div>
                   </div>
@@ -466,7 +466,7 @@
               </button>
               <!-- 发布按钮 -->
               <button 
-                class="flex-1 bg-[#ff2442] text-white py-3 rounded-full font-bold text-[18px] hover:opacity-90 cursor-pointer transition-all"
+                class="flex-1 bg-[#0E9384] text-white py-3 rounded-full font-bold text-[18px] hover:opacity-90 cursor-pointer transition-all"
                 @click="handlePublish"
               >
                 发布笔记

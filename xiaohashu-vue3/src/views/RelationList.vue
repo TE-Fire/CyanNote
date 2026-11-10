@@ -51,18 +51,18 @@
           <button 
             @click="activeTab = 'following'" 
             class="py-3 px-6 font-medium relative"
-            :class="activeTab === 'following' ? 'text-[#ff2442]' : 'text-gray-600'"
+            :class="activeTab === 'following' ? 'text-[#0E9384]' : 'text-gray-600'"
           >
             关注
-            <div v-if="activeTab === 'following'" class="absolute bottom-0 left-0 w-full h-0.5 bg-[#ff2442]"></div>
+            <div v-if="activeTab === 'following'" class="absolute bottom-0 left-0 w-full h-0.5 bg-[#0E9384]"></div>
           </button>
           <button 
             @click="activeTab = 'followers'" 
             class="py-3 px-6 font-medium relative"
-            :class="activeTab === 'followers' ? 'text-[#ff2442]' : 'text-gray-600'"
+            :class="activeTab === 'followers' ? 'text-[#0E9384]' : 'text-gray-600'"
           >
             粉丝
-            <div v-if="activeTab === 'followers'" class="absolute bottom-0 left-0 w-full h-0.5 bg-[#ff2442]"></div>
+            <div v-if="activeTab === 'followers'" class="absolute bottom-0 left-0 w-full h-0.5 bg-[#0E9384]"></div>
           </button>
         </div>
       </div>

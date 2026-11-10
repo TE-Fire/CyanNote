@@ -103,9 +103,9 @@ defineExpose({
 .spinner {
   width: 25px;
   height: 25px;
-  border: 3px solid rgba(255, 36, 66, 0.2);
+  border: 3px solid rgba(14, 147, 132, 0.2);
   border-radius: 50%;
-  border-top-color: #ff2442;
+  border-top-color: #0E9384;
   animation: spin 1s ease-in-out infinite;
 }
 

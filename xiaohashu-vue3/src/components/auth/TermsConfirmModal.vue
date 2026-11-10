@@ -7,7 +7,7 @@
     <div class="relative bg-white rounded-lg w-[320px] text-center">
       <h3 class="text-[16px] font-bold mb-[16px] mt-[24px] text-[#333]">阅读并同意</h3>
       
-      <div class="text-[16px] text-[#13386c] mb-[24px]">
+      <div class="text-[16px] text-[#0B7A6E] mb-[24px]">
         <div>《用户协议》《隐私政策》</div>
         <div>《儿童/青少年个人信息保护规则》</div>
       </div>

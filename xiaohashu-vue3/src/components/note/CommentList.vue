@@ -26,7 +26,7 @@
       <div class="flex items-center justify-center text-[14px]">
         <div class="text-gray-500">这是一片荒地</div>
         <div 
-          class="text-[#13386c] ml-[4px] cursor-pointer"
+          class="text-[#0B7A6E] ml-[4px] cursor-pointer"
           @click="onClickComment"
         >
           点击评论

@@ -55,7 +55,7 @@
               取消
             </button>
             <button 
-              class="cursor-pointer px-6 h-10 font-bold rounded-full bg-[#ff2442] text-white hover:opacity-90"
+              class="cursor-pointer px-6 h-10 font-bold rounded-full bg-[#0E9384] text-white hover:opacity-90"
               @click="$emit('confirm')"
             >
               确定
