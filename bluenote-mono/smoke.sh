@@ -31,7 +31,10 @@ show "401 未登录发笔记"     req /note/note/publish '{"title":"x"}'
 
 echo
 echo "=== 登录（seed 用户 1）==="
-LOGIN=$(req /auth/login '{"phone":"13800000001","code":"123456"}')
+# 验证码由服务端随机生成并随响应返回，先取后登，与前端行为一致
+CODE=$(req /auth/verification/code/send '{"phone":"13800000001"}' | sed -n 's/.*"data":"\([0-9]\{6\}\)".*/\1/p')
+echo "验证码=${CODE}"
+LOGIN=$(req /auth/login "{\"phone\":\"13800000001\",\"code\":\"$CODE\"}")
 echo "$LOGIN"
 TOKEN=$(echo "$LOGIN" | sed -n 's/.*"data":"\([^"]*\)".*/\1/p')
 echo "token=${TOKEN:0:12}..."
@@ -55,7 +58,8 @@ show "logout"               req /auth/logout '{}' "$TOKEN"
 
 echo
 echo "=== 新用户：登录即注册 → 更新资料 → 发布 ==="
-NEW=$(req /auth/login '{"phone":"13900000099","code":"123456"}')
+NCODE=$(req /auth/verification/code/send '{"phone":"13900000099"}' | sed -n 's/.*"data":"\([0-9]\{6\}\)".*/\1/p')
+NEW=$(req /auth/login "{\"phone\":\"13900000099\",\"code\":\"$NCODE\"}")
 NTOKEN=$(echo "$NEW" | sed -n 's/.*"data":"\([^"]*\)".*/\1/p')
 echo "新用户 token=${NTOKEN:0:12}..."
 

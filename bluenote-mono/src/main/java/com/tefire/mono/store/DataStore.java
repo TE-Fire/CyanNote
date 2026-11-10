@@ -37,6 +37,8 @@ public class DataStore {
 
     /** token -> userId */
     public final Map<String, Long> tokens = new ConcurrentHashMap<>();
+    /** phone -> 已下发的验证码，演示环境直接随响应返回给前端展示 */
+    public final Map<String, String> codes = new ConcurrentHashMap<>();
     /** userId -> 关注的 userId 集合 */
     public final Map<Long, Set<Long>> follows = new ConcurrentHashMap<>();
     /** noteId -> 点赞用户 */
@@ -66,6 +68,19 @@ public class DataStore {
         String token = UUID.randomUUID().toString().replace("-", "");
         tokens.put(token, userId);
         return token;
+    }
+
+    /** 生成 6 位随机验证码并暂存，供前端直接展示。 */
+    public synchronized String issueCode(String phone) {
+        String code = String.format("%06d", java.util.concurrent.ThreadLocalRandom.current().nextInt(1_000_000));
+        codes.put(phone, code);
+        return code;
+    }
+
+    /** 已下发过验证码的必须匹配；未点过获取验证码的放行，便于演示直接登录。 */
+    public boolean verifyCode(String phone, String code) {
+        String expected = codes.get(phone);
+        return expected == null || expected.equals(code);
     }
 
     /** 验证码登录：手机号不存在则建号，前端拿不到密码体系。 */

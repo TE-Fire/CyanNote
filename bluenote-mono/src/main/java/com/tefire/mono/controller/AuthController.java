@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 /**
- * 演示用登录：短信不真发，验证码任意 6 位以内的非空值均可通过。
+ * 演示用登录：短信不真发，验证码由服务端随机生成后随响应返回，前端直接展示并填入。
  * 登录即注册，返回的 data 就是 token 字符串——前端直接塞进 store。
  */
 @RestController
@@ -32,7 +32,7 @@ public class AuthController {
         if (phone == null || phone.isBlank()) {
             return R.fail("手机号不能为空");
         }
-        return R.ok(null);
+        return R.ok(store.issueCode(phone.trim()));
     }
 
     @PostMapping("/login")
@@ -47,6 +47,9 @@ public class AuthController {
         }
         if (code == null || code.isBlank()) {
             return R.fail("验证码不能为空");
+        }
+        if (!store.verifyCode(phone.trim(), code.trim())) {
+            return R.fail("验证码错误");
         }
         Map<String, Object> user = store.loginByPhone(phone.trim());
         Long userId = Json.asLong(user.get("userId"));

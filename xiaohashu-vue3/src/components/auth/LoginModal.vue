@@ -36,7 +36,7 @@
               <input 
                 type="text" 
                 placeholder="输入手机号" 
-                class="flex-1 outline-none text-[15px] ml-1 bg-transparent caret-[#ff2442]"
+                class="flex-1 outline-none text-[15px] ml-1 bg-transparent caret-[#0E9384]"
                 v-model="formattedPhone"
                 maxlength="13"
                 @input="formatPhoneNumber"
@@ -45,12 +45,12 @@
           </div>
 
           <!-- 验证码输入 -->
-          <div class="relative mb-8">
+          <div class="relative mb-3">
             <div class="flex items-center bg-[#f4f4f4] rounded-3xl h-[48px] px-4">
               <input 
                 type="text" 
                 placeholder="输入验证码" 
-                class="flex-1 outline-none text-[15px] bg-transparent caret-[#ff2442]"
+                class="flex-1 outline-none text-[15px] bg-transparent caret-[#0E9384]"
                 v-model="code"
                 maxlength="6"
                 @input="formatCode"
@@ -66,9 +66,21 @@
             </div>
           </div>
 
+          <!-- 演示环境：验证码直接展示 -->
+          <div 
+            v-if="smsCode" 
+            class="mb-6 flex items-center justify-between rounded-xl bg-[#E7F4F1] px-4 py-2.5 text-left"
+          >
+            <span class="text-[13px] text-[#5b7b76]">
+              演示环境不发短信，验证码
+            </span>
+            <span class="text-[15px] font-bold tracking-[0.22em] text-[#0B7A6E]">{{ smsCode }}</span>
+          </div>
+          <div v-else class="mb-6"></div>
+
           <!-- 登录按钮 -->
           <button 
-            class="w-full bg-[#ff2442] text-white rounded-full h-[48px] text-[16px] cursor-pointer
+            class="w-full bg-[#0E9384] text-white rounded-full h-[48px] text-[16px] cursor-pointer
             font-bold hover:bg-opacity-90 mt-5"
             @click="handleLogin"
           >
@@ -81,9 +93,9 @@
               <input type="checkbox" class="w-4 h-4" v-model="agreeTerms">
               <div>
                 <span>我已阅读并同意</span>
-                <a href="#" class="text-[#13386c] cursor-pointer">《用户协议》</a>
-                <a href="#" class="text-[#13386c] cursor-pointer">《隐私政策》</a>
-                <a href="#" class="text-[#13386c] cursor-pointer">《儿童/青少年个人信息保护规则》</a>
+                <a href="#" class="text-[#0B7A6E] cursor-pointer">《用户协议》</a>
+                <a href="#" class="text-[#0B7A6E] cursor-pointer">《隐私政策》</a>
+                <a href="#" class="text-[#0B7A6E] cursor-pointer">《儿童/青少年个人信息保护规则》</a>
               </div>
             </div>
           </div>
@@ -105,7 +117,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onUnmounted } from 'vue'
+import { ref, computed, onUnmounted, watch } from 'vue'
 import gsap from 'gsap'
 import { message } from '@/utils/message'
 import TermsConfirmModal from './TermsConfirmModal.vue'
@@ -127,6 +139,7 @@ const emit = defineEmits(['update:visible'])
 const phone = ref('')
 const formattedPhone = ref('')
 const code = ref('')
+const smsCode = ref('')
 const agreeTerms = ref(false)
 
 const modalRef = ref(null)
@@ -149,28 +162,33 @@ const isPhoneValid = computed(() => {
 // 按钮样式计算属性
 const buttonClass = computed(() => {
   if (countdown.value > 0) {
-    return 'text-[#fe2c55]/40 cursor-not-allowed'
+    return 'text-[#0E9384]/40 cursor-not-allowed'
   }
   return isPhoneValid.value 
-    ? 'text-[#fe2c55] hover:text-[#f4294f]' 
-    : 'text-[#fe2c55]/60 cursor-not-allowed'
+    ? 'text-[#0E9384] hover:text-[#0B7A6E]' 
+    : 'text-[#0E9384]/60 cursor-not-allowed'
 })
 
 // 获取验证码
-const getCode = () => {
-  if (!isPhoneValid.value || countdown.value > 0) return
+let codePhone = ''
+const getCode = (force = false) => {
+  if (!isPhoneValid.value) return
+  if (!force && countdown.value > 0) return
   
-  // 调用获取验证码接口
+  // 演示环境：验证码由服务端随机生成后返回，直接展示并自动填入
   getVerificationCode(phone.value).then(res => {
     if (!res.success) {
       message.show(res.message)
       return
     }
     
-    message.show('验证码已发送')
+    codePhone = phone.value
+    smsCode.value = res.data
+    code.value = res.data
     
     // 开始倒计时
     countdown.value = 180 // 3分钟
+    clearInterval(timer)
     timer = setInterval(() => {
       countdown.value--
       if (countdown.value <= 0) {
@@ -179,6 +197,11 @@ const getCode = () => {
     }, 1000)
   })
 }
+
+// 手机号填满即自动取码；换号后重新取，避免展示上一个号的验证码
+watch(phone, (value) => {
+  if (value.length === 11 && value !== codePhone) getCode(true)
+})
 
 // 组件卸载时清除定时器
 onUnmounted(() => {
